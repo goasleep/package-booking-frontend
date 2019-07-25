@@ -1,72 +1,63 @@
 <template>
-  <a-table :columns="columns" :dataSource="data">
+  <a-table :columns="columns" :dataSource="getOrderList">
     <a slot="name" slot-scope="text" href="javascript:;">{{text}}</a>
-    <span slot="customTitle"><a-icon type="smile-o" /> Name</span>
+    <span slot="customTitle"> Name</span>
     <span slot="tags" slot-scope="tags">
-      <a-tag v-for="tag in tags" color="blue" :key="tag">{{tag}}</a-tag>
+      <a-tag v-for="tag in tags" color="blue" :key="tag">
+      
+      </a-tag>
     </span>
     <span slot="action" slot-scope="text, record">
-      <a href="javascript:;">Invite 一 {{record.name}}</a>
-      <a-divider type="vertical" />
-      <a href="javascript:;">Delete</a>
-      <a-divider type="vertical" />
-      <a href="javascript:;" class="ant-dropdown-link">
-        More actions <a-icon type="down" />
-      </a>
+      <a href="javascript:;" @click="changeItemStatue(record)">确认收货</a>
     </span>
   </a-table>
 </template>
 <script>
 const columns = [{
-  dataIndex: 'name',
-  key: 'name',
-  slots: { title: 'customTitle' },
-  scopedSlots: { customRender: 'name' },
+  dataIndex: 'packageId',
+  key: 'packageId',
+  title: '订单号',
 }, {
-  title: 'Age',
-  dataIndex: 'age',
-  key: 'age',
+  title: '收件人',
+  dataIndex: 'recipientName',
+  key: 'recipientName',
 }, {
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
+  title: '电话',
+  dataIndex: 'phoneNumber',
+  key: 'phoneNumber',
 }, {
-  title: 'Tags',
-  key: 'tags',
-  dataIndex: 'tags',
-  scopedSlots: { customRender: 'tags' },
+  title: '状态',
+  key: 'statue',
+  dataIndex: 'statue',
 }, {
-  title: 'Action',
+  title: '预约时间',
+  key: 'date',
+  dataIndex: 'date',
+}, {
   key: 'action',
   scopedSlots: { customRender: 'action' },
-}];
-
-const data = [{
-  key: '1',
-  name: 'John Brown',
-  age: 32,
-  address: 'New York No. 1 Lake Park',
-  tags: ['nice', 'developer'],
-}, {
-  key: '2',
-  name: 'Jim Green',
-  age: 42,
-  address: 'London No. 1 Lake Park',
-  tags: ['loser'],
-}, {
-  key: '3',
-  name: 'Joe Black',
-  age: 32,
-  address: 'Sidney No. 1 Lake Park',
-  tags: ['cool', 'teacher'],
-}];
+}]
 
 export default {
   data() {
     return {
-      data,
       columns,
     }
-  }
+  },
+  mounted() {
+      this.$store.dispatch("flushItems")
+  },
+  computed: {
+      getOrderList(){
+          return this.$store.getters.getShowList
+      }
+  },
+  methods: {
+     changeItemStatue(tag){
+         tag.statue = "completed"
+        this.$store.dispatch("update", tag);
+        
+      }
+  },
 }
 </script>
