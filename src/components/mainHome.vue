@@ -1,15 +1,18 @@
 <template>
-    <div>
-
-    </div>
+  <div class="home">
+  <Header></Header>
+  <OrderList></OrderList>
+  </div>
 </template>
 
 <script>
-    export default {
-        
-    }
+import OrderList from '@/components/OrderList'
+import Header from '@/components/Header'
+export default {
+  name: 'home',
+  components: {
+      OrderList,
+      Header
+  }
+}
 </script>
-
-<style lang="scss" scoped>
-
-</style>
